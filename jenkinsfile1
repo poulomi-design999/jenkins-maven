@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    triggers {
+        // Trigger the pipeline when changes are pushed to the develop branch
+        pollSCM('H/5 * * * *')
+    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                // Clone the Git repository to the workspace
+                git branch: 'develop', url: 'https://github.com/poulomi-design999/jenkins-maven/new/main'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Assuming you want to pull the content to a specific folder
+                script {
+                    def targetFolder = '/poulomi-design999/jenkins-maven/tree/main/2024'
+                    sh "cp -r ${env.WORKSPACE}/* ${targetFolder}/"
+                }
+            }
+        }
+    }
+}
