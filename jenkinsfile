@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    triggers {
+        pollSCM('H/5 * * * *')
+    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: 'develop', url: 'https://github.com/poulomi-design999/jenkins-maven/new/main'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    def targetFolder = '/poulomi-design999/jenkins-maven/tree/develop'
+                    sh "cp -r ${env.WORKSPACE}/* ${targetFolder}/"
+                }
+            }
+        }
+    }
+}
